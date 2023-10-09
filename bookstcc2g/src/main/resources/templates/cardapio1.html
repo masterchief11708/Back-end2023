@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Página de Administração</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="card.css">
+</head>
+<body>
+    <h1>Cardápio</h1>
+    
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Imagem</th>
+                <th>Item</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><img src="Iced Cappucino.jfif" alt="Item 1" width="100"></td>
+                <td>Iced Cappucino 400ml</td>
+                <td>
+                    <button onclick="editarItem(1)">Editar</button>
+                    <button onclick="excluirItem(1)">Excluir</button>
+                </td>
+            </tr>
+            <tr>
+                <td><img src="Coffee Shake.jfif" alt="Item 2" width="100"></td>
+                <td>Coffee Shake 400ml</td>
+                <td>
+                    <button onclick="editarItem(2)">Editar</button>
+                    <button onclick="excluirItem(2)">Excluir</button>
+                </td>
+            </tr>
+       
+            <tr>
+                <td><img src="Iced Latte.jfif" alt="Item 3" width="100"></td>
+                <td>Iced Latte 350ml</td>
+                <td>
+                    <button onclick="editarItem(3)">Editar</button>
+                    <button onclick="excluirItem(3)">Excluir</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <form id="editarForm" style="display: none;">
+        <input type="hidden" id="itemId">
+        <label for="itemNome">Nome do Item:</label>
+        <input type="text" id="itemNome" required><br>
+        <label for="itemImagem">Imagem:</label>
+        <input type="file" id="itemImagem" accept="image/*"><br>
+        <img id="preview" src="" alt="Preview da Imagem" width="100" style="display: none;"><br>
+        <button type="submit">Salvar</button>
+        <button type="button" onclick="cancelarEdicao()">Cancelar</button>
+    </form>
+    
+    <button onclick="adicionarItem()">Adicionar Item</button>
+
+    <script>
+        function editarItem(itemId) {
+            if (itemId >= 0 && itemId < 3) {
+                const item = document.querySelector(`tr:nth-child(${itemId + 1})`);
+                const nome = item.cells[1].textContent;
+                const imagemSrc = item.cells[0].querySelector('img').src;
+                document.getElementById('itemId').value = itemId;
+                document.getElementById('itemNome').value = nome;
+                document.getElementById('preview').src = imagemSrc;
+            } else {
+               
+                document.getElementById('itemId').value = 0;
+                document.getElementById('itemNome').value = '';
+                document.getElementById('preview').src = '';
+            }
+            document.getElementById('editarForm').style.display = 'block';
+        }
+
+        function cancelarEdicao() {
+            document.getElementById('editarForm').style.display = 'none';
+            document.getElementById('preview').src = '';
+        }
+
+        function excluirItem(itemId) {
+            const confirmacao = confirm('Deseja realmente excluir este item?');
+            if (confirmacao) {
+            }
+        }
+
+        function adicionarItem() {
+            editarItem(-1);
+        }
+
+        document.getElementById('itemImagem').addEventListener('change', function () {
+            const preview = document.getElementById('preview');
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(this.files[0]);
+            } else {
+                preview.src = '';
+                preview.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
+
